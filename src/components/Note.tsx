@@ -8,7 +8,7 @@ import { ColorPanel } from './ColorPanel';
 import { ReactComponent as TrashIcon } from '../assets/trash-icon.svg';
 import { ReactComponent as ColorPlateIcon } from '../assets/color-icon.svg';
 
-import { INote } from '../models';
+import { INote } from '../types';
 
 const TRANSITION_TIME = 0.2;
 let zIndex = 100;

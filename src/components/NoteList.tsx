@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Note } from "./Note";
-import { INote } from "../models";
+import { INote } from "../types";
 
 interface NoteListProps {
   notes: INote[];

@@ -1,4 +1,4 @@
-import { INote } from "./models";
+import { INote } from "./types";
 
 interface IAction {
   type: 'add' | 'delete' | 'update';
