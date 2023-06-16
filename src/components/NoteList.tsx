@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import { Note } from "./Note";
-import { INote } from "../types";
+import { IAction, INote } from "../types";
+import { Dispatch } from "react";
+import { actions } from "../NotesManager";
+import { IupdateNote } from "../types";
 
 interface NoteListProps {
   notes: INote[];
-  dispatch: any;
+  dispatch: Dispatch<IAction>;
   handleClick: (noteId: number) => void;
   activeNoteId: number;
 }
@@ -22,18 +25,12 @@ export function NoteList({
     );
 
     if (answer) {
-      dispatch({
-        type: 'delete',
-        id
-      });
+      dispatch(actions.deleteNote(id));
     }
   };
 
-  const handleChange = (newNote: INote) => {
-    dispatch({
-      type: 'update',
-      ...newNote
-    });
+  const handleChange = (payload: IupdateNote) => {
+    dispatch(actions.updateNote(payload));
   }
 
   return (
@@ -43,8 +40,8 @@ export function NoteList({
           <Note
             key={note.id}
             note={note}
-            handleClick={() => handleClick(note.id!)}
-            handleDelete={() => handleDelete(note.id!)}
+            handleClick={() => handleClick(note.id)}
+            handleDelete={() => handleDelete(note.id)}
             handleChange={handleChange}
             isActive={activeNoteId === note.id}
           />

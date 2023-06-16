@@ -2,7 +2,7 @@ import { GlobalStyles } from "./styles/GlobalStyles";
 import styled from "styled-components";
 import { NoteList } from './components/NoteList'
 import { useState, useEffect, useReducer } from "react";
-import { getNextId, getNotes, notesReducer } from './NotesManager';
+import { getNextId, getNotes, notesReducer, actions } from './NotesManager';
 
 import React from 'react';
 
@@ -22,12 +22,8 @@ export default function App() {
     return () => window.removeEventListener('click', handler);
   }, []);
 
-  const handleAdd = (title: string, text: string) => {
-    dispatch({
-      type: 'add',
-      title,
-      text
-    });
+  const handleAdd = () => {
+    dispatch(actions.createNote());
 
     setActiveNoteId(getNextId());
   };
@@ -48,7 +44,7 @@ export default function App() {
             <Item
               onClick={e => {
                 e.stopPropagation(); 
-                handleAdd('', '');
+                handleAdd();
               }}
             >
               <AddNoteButton>Add a note</AddNoteButton>
