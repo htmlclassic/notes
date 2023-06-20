@@ -90,7 +90,7 @@ export function Note({
       <StyledNote
         isActive={isActive}
         bgColor={bgColor}
-        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+        onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
           e.stopPropagation();
           handleClick();
         }}

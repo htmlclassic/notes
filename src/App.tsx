@@ -17,9 +17,9 @@ export default function App() {
   useEffect(() => {
     const handler = () => setActiveNoteId(-1);
 
-    window.addEventListener('click', handler);
+    window.addEventListener('mousedown', handler);
 
-    return () => window.removeEventListener('click', handler);
+    return () => window.removeEventListener('mousedown', handler);
   }, []);
 
   const handleAdd = () => {
