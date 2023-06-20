@@ -112,7 +112,7 @@ export function Note({
             handleChange={handleInputTextChange}
           />
         </Content>
-        <Toolbar>
+        <Toolbar onMouseDown={e => e.stopPropagation()}>
             <ChangeBgColorBtn onClick={e => {
               e.stopPropagation();
               setShowColorPanel(!showColorPanel);
@@ -120,10 +120,7 @@ export function Note({
               <ColorPlateIcon />
             </ChangeBgColorBtn>
             <DeleteNoteBtn
-              onClick={e => {
-                e.stopPropagation();
-                handleDelete();
-              }}
+              onClick={handleDelete}
             >
               <TrashIcon />
             </DeleteNoteBtn>
