@@ -194,8 +194,8 @@ const StyledNote = styled.div<any>`
   cursor: pointer;
   border: 2px solid transparent;
   transition: all 0.15s;
-  ${({ bgColor }) => {
-    if (bgColor === '#ffffff') {
+  ${({ bgColor, isActive }) => {
+    if (bgColor === '#ffffff' && !isActive) {
       return 'border: 2px solid rgba(0, 0, 0, 0.1);';
     }
   }}
