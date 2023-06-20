@@ -92,7 +92,11 @@ export function Note({
         bgColor={bgColor}
         onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
           e.stopPropagation();
-          handleClick();
+
+          // 0 === primary mouse button (left button)
+          if (e.button === 0) {
+            handleClick();
+          }
         }}
         ref={noteRef}
       >
