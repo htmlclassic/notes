@@ -8,7 +8,7 @@ import { ColorPanel } from './ColorPanel';
 import { ReactComponent as TrashIcon } from '../assets/trash-icon.svg';
 import { ReactComponent as ColorPlateIcon } from '../assets/color-icon.svg';
 
-import { INote, IupdateNote } from '../types';
+import { INote, InoteUpdatePayload } from '../types';
 
 const TRANSITION_TIME = 0.2;
 let zIndex = 100;
@@ -18,7 +18,7 @@ interface NoteProps {
   isActive: boolean;
   handleClick: () => void;
   handleDelete: () => void;
-  handleChange: (payload: IupdateNote) => void;
+  handleChange: (payload: InoteUpdatePayload) => void;
 }
 
 export function Note({

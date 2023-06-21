@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import { Note } from "./Note";
-import { IAction, INote } from "../types";
+import { ActionType, INote, InoteUpdatePayload } from "../types";
 import { Dispatch } from "react";
 import { actions } from "../NotesManager";
-import { IupdateNote } from "../types";
 
 interface NoteListProps {
   notes: INote[];
-  dispatch: Dispatch<IAction>;
+  dispatch: Dispatch<ActionType>;
   handleClick: (noteId: number) => void;
   activeNoteId: number;
 }
@@ -29,7 +28,7 @@ export function NoteList({
     }
   };
 
-  const handleChange = (payload: IupdateNote) => {
+  const handleChange = (payload: InoteUpdatePayload) => {
     dispatch(actions.updateNote(payload));
   }
 

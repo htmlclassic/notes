@@ -1,16 +1,16 @@
-import { INote, IAction, IupdateNote } from "./types";
+import { INote, ActionType, InoteUpdatePayload } from "./types";
 
 export const actions = {
   createNote: () => {
-    const action: IAction = {
+    const action: ActionType = {
       type: 'note/created'
     };
 
     return action;
   },
 
-  updateNote: (payload: IupdateNote) => {
-    const action: IAction = {
+  updateNote: (payload: InoteUpdatePayload) => {
+    const action: ActionType = {
       type: 'note/updated',
       payload
     };
@@ -19,7 +19,7 @@ export const actions = {
   },
 
   deleteNote: (noteId: number) => {
-    const action: IAction = {
+    const action: ActionType = {
       type: 'note/deleted',
       payload: noteId
     };
@@ -28,7 +28,7 @@ export const actions = {
   },
 };
 
-export function notesReducer(notes: INote[], action: IAction) {
+export function notesReducer(notes: INote[], action: ActionType) {
   switch (action.type) {
     case 'note/created': {
       const nextNotes = [
@@ -44,13 +44,7 @@ export function notesReducer(notes: INote[], action: IAction) {
       return nextNotes;
     }
     case 'note/deleted': {
-      console.log(notes)
-
-      const nextNotes = notes.filter(note => note.id !== action.payload);
-
-      console.log(nextNotes);
-      
-      return nextNotes;
+      return notes.filter(note => note.id !== action.payload);;
     }
     case 'note/updated': {
       // I'm mutating state on intention
@@ -68,9 +62,6 @@ export function notesReducer(notes: INote[], action: IAction) {
 
       return notes;
     }
-    default:
-      // not sure I need this line anymore. I wrote it before I got into TypeScript
-      throw new Error('Unknown action type: ' + action.type);
   }
 }
 

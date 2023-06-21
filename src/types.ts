@@ -5,14 +5,25 @@ export interface INote {
   bgColor: string;
 }
 
-export interface IAction {
-  type: 'note/created' | 'note/updated' | 'note/deleted';
-  payload?: any;
-}
-
-export interface IupdateNote {
+export interface InoteUpdatePayload {
   id: number;
   title?: string;
   text?: string;
   bgColor?: string;
+}
+
+export type ActionType = InoteCreate | InoteDelete | InoteUpdate;
+
+interface InoteCreate {
+  type: 'note/created';
+}
+
+interface InoteDelete {
+  type: 'note/deleted';
+  payload: number;
+}
+
+interface InoteUpdate {
+  type: 'note/updated';
+  payload: InoteUpdatePayload;
 }
