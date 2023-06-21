@@ -147,8 +147,6 @@ function getViewportCenterCoords() {
 
 // calculates coordinates to center an element in a viewport based on an element's size
 function getTranslateCoords(element: HTMLElement, width: string, height: string) {
-  // if (!element) return [-1, -1];
-
   const w = convertToPixels(width);
   const h = convertToPixels(height);
 
@@ -159,7 +157,6 @@ function getTranslateCoords(element: HTMLElement, width: string, height: string)
   return [vx - x - (w / 2), vy - y - (h / 2)];
 }
 
-// returns just a number. no 'px' at the end
 function convertToPixels(value: string) {
   const vw1 = window.innerWidth / 100;
   const vh1 = window.innerHeight / 100;
