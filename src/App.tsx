@@ -1,40 +1,16 @@
 import { GlobalStyles } from "./styles/GlobalStyles";
 import styled from "styled-components";
-import { NoteList } from './components/NoteList'
-import { useState, useEffect, useReducer } from "react";
-import { getNextId, getNotes, notesReducer, actions } from './NotesManager';
 
-import React from 'react';
+import { nanoid } from '@reduxjs/toolkit';
+
+import { NoteList } from './components/NoteList'
+
+import { useDispatch } from "react-redux";
+import { createNote } from "./features/notes/notesSlice";
+import { updateActiveNoteId } from "./features/activeNoteId/activeNoteIdSlice";
 
 export default function App() {
-  const [notes, dispatch] = useReducer(notesReducer, getNotes());
-  const [activeNoteId, setActiveNoteId] = useState(-1);
-
-  useEffect(() => {
-    localStorage.setItem('notes', JSON.stringify(notes));
-  });
-
-  useEffect(() => {
-    const handler = (e: any) => {
-      if (e.button === 0) {
-        setActiveNoteId(-1);
-      }
-    };
-
-    window.addEventListener('mousedown', handler);
-
-    return () => window.removeEventListener('mousedown', handler);
-  }, []);
-
-  const handleAdd = () => {
-    dispatch(actions.createNote());
-
-    setActiveNoteId(getNextId());
-  };
-
-  const handleClick = (id: number) => {
-    setActiveNoteId(id);
-  };
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -46,9 +22,11 @@ export default function App() {
         <Sidebar>
           <ul>
             <Item
-              onClick={e => {
-                e.stopPropagation(); 
-                handleAdd();
+              onClick={() => {
+                const id = nanoid();
+
+                dispatch(createNote(id));
+                dispatch(updateActiveNoteId(id));
               }}
             >
               <AddNoteButton>Add a note</AddNoteButton>
@@ -56,7 +34,7 @@ export default function App() {
           </ul>
         </Sidebar>
         <Main>
-          <NoteList notes={notes} dispatch={dispatch} handleClick={handleClick} activeNoteId={activeNoteId} />
+          <NoteList />
         </Main>
       </Container>
     </>

@@ -8,7 +8,7 @@ import { ColorPanel } from './ColorPanel';
 import { ReactComponent as TrashIcon } from '../assets/trash-icon.svg';
 import { ReactComponent as ColorPlateIcon } from '../assets/color-icon.svg';
 
-import { INote, InoteUpdatePayload } from '../types';
+import { INote } from '../types';
 
 const TRANSITION_TIME = 0.2;
 let zIndex = 100;
@@ -16,23 +16,23 @@ let zIndex = 100;
 interface NoteProps {
   note: INote;
   isActive: boolean;
-  handleClick: () => void;
   handleDelete: () => void;
-  handleChange: (payload: InoteUpdatePayload) => void;
+  handleChange: (payload: any) => void;
+  handleClick: () => void;
 }
 
 export function Note({
   note,
   isActive,
-  handleClick,
   handleDelete,
   handleChange,
+  handleClick
 } : NoteProps) {
 
   const wrapperRef = useRef(null);
   const noteRef: any = useRef(null);
   const [showColorPanel, setShowColorPanel] = useState(false);
-  const [bgColor, setBgColor] = useState<string>(note.bgColor!);
+  const [bgColor, setBgColor] = useState(note.bgColor);
 
   useEffect(() => {
     if (isActive) {
@@ -92,7 +92,7 @@ export function Note({
         bgColor={bgColor}
         onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
           e.stopPropagation();
-
+          
           // 0 === primary mouse button (left button)
           if (e.button === 0) {
             handleClick();

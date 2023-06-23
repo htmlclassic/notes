@@ -1,8 +1,9 @@
 export interface INote {
-  id: number;
+  id: string;
   title: string;
   text: string;
   bgColor: string;
+  trashed: boolean;
 }
 
 export interface InoteUpdatePayload {

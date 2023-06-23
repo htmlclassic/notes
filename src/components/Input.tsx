@@ -8,19 +8,21 @@ interface InputProps {
   className: string;
 }
 
+// this component (div with contenteditable=true) should be fully uncontrolled because when you set
+// innerHTML, cursor jumps at the beginning of a div
 export function Input({
   initialValue,
   placeholder,
   handleChange,
   className 
 }: InputProps) {
-
   const [showPlaceholder, setShowPlaceholder] = useState(initialValue === '');
   const ref: any = useRef(null);
 
   useEffect(() => {
     ref.current.innerHTML = initialValue;
-  },[initialValue])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return(
       <Wrapper>

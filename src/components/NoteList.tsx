@@ -1,35 +1,48 @@
 import styled from "styled-components";
 import { Note } from "./Note";
-import { ActionType, INote, InoteUpdatePayload } from "../types";
-import { Dispatch } from "react";
-import { actions } from "../NotesManager";
 
-interface NoteListProps {
-  notes: INote[];
-  dispatch: Dispatch<ActionType>;
-  handleClick: (noteId: number) => void;
-  activeNoteId: number;
-}
+import { useState, useEffect } from 'react';
 
-export function NoteList({
-  notes,
-  dispatch,
-  handleClick,
-  activeNoteId
-}: NoteListProps) {
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-  const handleDelete = (id: number) => {
+import { selectNotes, updateNote, deleteNote } from "../features/notes/notesSlice";
+import { selectActiveNoteId, updateActiveNoteId } from "../features/activeNoteId/activeNoteIdSlice";
+
+export function NoteList() {
+  const dispatch = useDispatch();
+  const notes = useSelector(selectNotes);
+  const activeNoteId = useSelector(selectActiveNoteId);
+
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes));
+  }, [notes]);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (e.button === 0) {
+        dispatch(updateActiveNoteId(null));
+      }
+    };
+
+    document.addEventListener('mousedown', handler);
+
+    return () => document.removeEventListener('mousedown', handler);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleDelete = (id: string) => {
     const answer = window.confirm(
       "Are you sure you want to delete the note?\nYou won't be able to restore it."
     );
 
     if (answer) {
-      dispatch(actions.deleteNote(id));
+      dispatch(deleteNote(id));
     }
   };
 
-  const handleChange = (payload: InoteUpdatePayload) => {
-    dispatch(actions.updateNote(payload));
+  const handleChange = (payload: any) => {
+    dispatch(updateNote(payload));
   }
 
   return (
@@ -39,10 +52,12 @@ export function NoteList({
           <Note
             key={note.id}
             note={note}
-            handleClick={() => handleClick(note.id)}
+            isActive={note.id === activeNoteId}
             handleDelete={() => handleDelete(note.id)}
             handleChange={handleChange}
-            isActive={activeNoteId === note.id}
+            handleClick={() => {
+              dispatch(updateActiveNoteId(note.id));
+            }}
           />
         )
       }
