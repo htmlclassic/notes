@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Note } from "./Note";
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
