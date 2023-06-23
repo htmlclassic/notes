@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 
 import { selectNotes, updateNote, deleteNote } from "../features/notes/notesSlice";
 import { selectActiveNoteId, updateActiveNoteId } from "../features/activeNoteId/activeNoteIdSlice";
+import { IactionUpdatePayload } from "../types";
 
 export function NoteList() {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ export function NoteList() {
     }
   };
 
-  const handleChange = (payload: any) => {
+  const handleChange = (payload: IactionUpdatePayload) => {
     dispatch(updateNote(payload));
   }
 

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { INote } from '../../types';
+import { INote, IactionDelete, IactionUpdate } from '../../types';
 
 const initialState: INote[] = JSON.parse(localStorage.getItem('notes') || '[]');
 
@@ -18,10 +18,12 @@ const notesSlice = createSlice({
       });
     },
 
-    deleteNote: (state, { payload }) => {
-      return state.filter(note => note.id !== payload);
+    deleteNote: (state, action: IactionDelete) => {
+      console.log(action);
+      return state.filter(note => note.id !== action.payload);
     },
 
+    updateNote: (state, action: IactionUpdate) => {
       const payload = action.payload;
       const targetNote = state.find(note => note.id === payload.id);
 
