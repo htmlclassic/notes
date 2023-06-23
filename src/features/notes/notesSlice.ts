@@ -22,14 +22,14 @@ const notesSlice = createSlice({
       return state.filter(note => note.id !== payload);
     },
 
-    updateNote: (state, { payload }) => {
+      const payload = action.payload;
       const targetNote = state.find(note => note.id === payload.id);
 
       if (!targetNote) return state;
 
-      if (payload.title) targetNote.title = payload.title;
-      if (payload.text) targetNote.text = payload.text;
-      if (payload.bgColor) targetNote.bgColor = payload.bgColor;
+      if (payload.title !== undefined) targetNote.title = payload.title;
+      if (payload.text !== undefined) targetNote.text = payload.text;
+      if (payload.bgColor !== undefined) targetNote.bgColor = payload.bgColor;
     }
   }
 });
