@@ -3,11 +3,10 @@ import styled from "styled-components";
 
 import { nanoid } from '@reduxjs/toolkit';
 
-import { NoteList } from './components/NoteList'
-
 import { useDispatch } from "react-redux";
 import { createNote } from "./features/notes/notesSlice";
 import { updateActiveNoteId } from "./features/activeNoteId/activeNoteIdSlice";
+import { Outlet, NavLink } from "react-router-dom";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -31,10 +30,16 @@ export default function App() {
             >
               <AddNoteButton>Add a note</AddNoteButton>
             </Item>
+            <Item>
+              <StyledNavLink to="/">Notes</StyledNavLink>
+            </Item>
+            <Item>
+              <StyledNavLink to="archived">Archived notes</StyledNavLink>
+            </Item>
           </ul>
         </Sidebar>
         <Main>
-          <NoteList />
+          <Outlet />
         </Main>
       </Container>
     </>
@@ -115,14 +120,40 @@ const AddNoteButtonStyled = styled.button`
   font-size: inherit;
 `;
 
+const StyledNavLink = styled(NavLink)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: inherit;
+
+  &.active {
+    background-color: #feefc3;
+  }
+`;
+
 const Item = styled.li`
   cursor: pointer;
-  padding: 15px;
+  height: 50px;
   border-radius: 10px;
-  transition: background-color 0.3s;
-  background-color: #e9e9e9;
+  border: 2px solid transparent;
+  transition: all 0.1s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:first-child {
+    margin-bottom: 30px;
+    border: 2px dashed orange;
+    
+    &:hover {
+      background-color: #ffd988;
+    }
+  }
 
   &:hover {
-    background-color: #feefc3;
+    border: 2px solid orange;
   }
 `;
