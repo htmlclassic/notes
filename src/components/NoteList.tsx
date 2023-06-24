@@ -9,11 +9,17 @@ import { useSelector } from "react-redux";
 import { selectNotes, updateNote, deleteNote } from "../features/notes/notesSlice";
 import { selectActiveNoteId, updateActiveNoteId } from "../features/activeNoteId/activeNoteIdSlice";
 import { IactionUpdatePayload } from "../types";
+import { Outlet } from "react-router-dom";
 
-export function NoteList() {
+interface NoteListProps {
+  filter: 'all' | 'archived'
+}
+
+export function NoteList({ filter }: NoteListProps) {
   const dispatch = useDispatch();
-  const notes = useSelector(selectNotes);
+  const notes = useSelector(selectNotes).slice();
   const activeNoteId = useSelector(selectActiveNoteId);
+  let notesList;
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
@@ -32,24 +38,22 @@ export function NoteList() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleDelete = (id: string) => {
-    const answer = window.confirm(
-      "Are you sure you want to delete the note?\nYou won't be able to restore it."
-    );
-
-    if (answer) {
-      dispatch(deleteNote(id));
-    }
-  };
+  const handleDelete = (id: string) => dispatch(deleteNote(id));
 
   const handleChange = (payload: IactionUpdatePayload) => {
     dispatch(updateNote(payload));
+  };
+
+  if (filter === 'archived') {
+    notesList = notes.filter(note => note.trashed);
+  } else {
+    notesList = notes.filter(note => !note.trashed);
   }
 
   return (
     <StyledNotesBlock>
       {
-        notes.slice(0).reverse().map(note =>
+        notesList.reverse().map(note =>
           <Note
             key={note.id}
             note={note}
@@ -62,6 +66,7 @@ export function NoteList() {
           />
         )
       }
+      <Outlet />
     </StyledNotesBlock>
   );
 }
