@@ -19,8 +19,15 @@ const notesSlice = createSlice({
     },
 
     deleteNote: (state, action: IactionDelete) => {
-      console.log(action);
-      return state.filter(note => note.id !== action.payload);
+      const note = state.find(note => note.id === action.payload);
+
+      if (note) {
+        if (note.trashed) {
+          return state.filter(el => note.id !== el.id);
+        }
+
+        note.trashed = true;
+      }
     },
 
     updateNote: (state, action: IactionUpdate) => {
