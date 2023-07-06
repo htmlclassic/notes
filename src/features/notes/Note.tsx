@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { toRem } from '../styles/utils'
+import { toRem } from '../../styles/utils'
 
-import { Input } from './Input';
-import { ColorPanel } from './ColorPanel';
+import { Input } from '../../components/Input';
+import { ColorPanel } from '../../components/ColorPanel';
 
-import { ReactComponent as TrashIcon } from '../assets/trash-icon.svg';
-import { ReactComponent as ColorPlateIcon } from '../assets/color-icon.svg';
+import { ReactComponent as TrashIcon } from './assets/trash-icon.svg';
+import { ReactComponent as ColorPlateIcon } from './assets/color-icon.svg';
 
-import { INote, IactionUpdatePayload } from '../types';
+import { INote, IactionUpdatePayload } from '../../types';
 
 const TRANSITION_TIME = 0.2;
 let zIndex = 100;
@@ -67,7 +67,9 @@ export function Note({
     noteRef.current.style.transform = ``;
 
     setTimeout(() => {
-      noteRef.current.style.zIndex = '';
+      if (noteRef.current) {
+        noteRef.current.style.zIndex = '';
+      }
     }, TRANSITION_TIME * 1000);
   };
 
@@ -108,10 +110,13 @@ export function Note({
             />
           <StyledTextInput
             initialValue={note.text}
-            placeholder="Note"
+            placeholder="Text"
             handleChange={handleInputTextChange}
           />
         </Content>
+        <Labels active={isActive}>
+          <Label>{note.labels}</Label>
+        </Labels>
         <Toolbar onMouseDown={e => e.stopPropagation()}>
             <ChangeBgColorBtn onClick={e => {
               e.stopPropagation();
@@ -173,8 +178,8 @@ function convertToPixels(value: string) {
 const SIDE_PADDING = '17px';
 
 const Wrapper = styled.div`
-  width: 250px;
-  height: 300px;
+  width: 270px;
+  height: 350px;
   position: relative;
 `;
 
@@ -216,16 +221,51 @@ const Content = styled.div<any>`
   padding: 0 ${SIDE_PADDING};
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  height: 100%;
+  flex-grow: 1;
 
   overflow: ${({ active }) => active ? 'auto' : 'hidden'};
 `;
 
-const TOOLBAR_SIDE_PADDING = 5; // px
+
+
+const Labels = styled.ul<any>`
+  --fontSize: 1rem;
+  --sidePadding: 5px;
+  --onelineHeight: calc(
+    var(--sidePadding) * 2
+    + var(--fontSize)
+    + 4px
+  );
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 0 var(--sidePadding);
+  overflow-y: ${({ active }) => active ? 'auto' : 'hidden'};
+  flex-shrink: 0;
+  max-height: ${({ active }) => active ? '100px' : 'var(--onelineHeight)'};
+`;
+
+const Label = styled.li`
+  cursor: pointer;
+  padding: 5px 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 15px;
+
+  transition: all 0.15s;
+
+  &:hover {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  white-space: nowrap;
+`;
+
+const TOOLBAR_SIDE_PADDING = '5px'; // px
 
 const Toolbar = styled.div`
-  padding: 0 ${TOOLBAR_SIDE_PADDING}px;
+  padding: 0 ${TOOLBAR_SIDE_PADDING};
   display: flex;
   justify-content: space-between;
   gap: 3px;

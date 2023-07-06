@@ -1,20 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { INote, IactionDelete, IactionUpdate } from '../../types';
+import { reservedLabels } from '../labels/labelsSlice';
+
+// localStorage.setItem('notes', ''); // clear storage
 
 const initialState: INote[] = JSON.parse(localStorage.getItem('notes') || '[]');
 
-const notesSlice = createSlice({
+const slice = createSlice({
   name: 'notes',
   initialState,
   reducers: {
     createNote: (state, action) => {
       state.push({
-        id: action.payload,
+        id: action.payload.id,
         title: '',
         text: '',
         bgColor: '#ffffff',
-        trashed: false
+        labels: [ action.payload.activeLabel ]
       });
     },
 
@@ -22,11 +25,11 @@ const notesSlice = createSlice({
       const note = state.find(note => note.id === action.payload);
 
       if (note) {
-        if (note.trashed) {
+        if (note.labels.includes(reservedLabels.trash)) {
           return state.filter(el => note.id !== el.id);
         }
 
-        note.trashed = true;
+        note.labels = [reservedLabels.trash];
       }
     },
 
@@ -39,10 +42,20 @@ const notesSlice = createSlice({
       if (payload.title !== undefined) targetNote.title = payload.title;
       if (payload.text !== undefined) targetNote.text = payload.text;
       if (payload.bgColor !== undefined) targetNote.bgColor = payload.bgColor;
+      if (
+        payload.label !== undefined &&
+        payload.label !== reservedLabels.empty &&
+        payload.label !== reservedLabels.all &&
+        payload.label !== reservedLabels.trash
+      ) {
+        // i mean it's cool that you reserved some words and dont let a user create a label like that
+        // but how the fuck is he notified about it?
+        targetNote.labels.push(payload.label);
+      }
     }
   }
 });
 
 export const selectNotes = (state: { notes: INote[] }) => state.notes;
-export const notesSliceReducer = notesSlice.reducer;
-export const { createNote, deleteNote, updateNote } = notesSlice.actions;
+export const notesSliceReducer = slice.reducer;
+export const { createNote, deleteNote, updateNote } = slice.actions;

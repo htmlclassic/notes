@@ -1,15 +1,28 @@
 import { GlobalStyles } from "./styles/GlobalStyles";
 import styled from "styled-components";
 
+import { useEffect } from 'react';
+
 import { nanoid } from '@reduxjs/toolkit';
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createNote } from "./features/notes/notesSlice";
 import { updateActiveNoteId } from "./features/activeNoteId/activeNoteIdSlice";
-import { Outlet, NavLink } from "react-router-dom";
+
+import { NoteList } from "./features/notes/NoteList";
+import { LabelsList } from "./features/labels/LabelsList";
+
+import { selectActiveLabel, updateActiveLabel } from "./features/activeLabel/activeLabelSlice";
+import { useSearchParams } from "react-router-dom";
 
 export default function App() {
   const dispatch = useDispatch();
+  const activeLabel = useSelector(selectActiveLabel);
+  const label = useSearchParams()[0].get('filter');
+
+  useEffect(() => {
+    dispatch(updateActiveLabel(label));
+  });
 
   return (
     <>
@@ -24,22 +37,17 @@ export default function App() {
               onClick={() => {
                 const id = nanoid();
 
-                dispatch(createNote(id));
+                dispatch(createNote({id, activeLabel}));
                 dispatch(updateActiveNoteId(id));
               }}
             >
               <AddNoteButton>Add a note</AddNoteButton>
             </Item>
-            <Item>
-              <StyledNavLink to="/">Notes</StyledNavLink>
-            </Item>
-            <Item>
-              <StyledNavLink to="archived">Archived notes</StyledNavLink>
-            </Item>
+            <LabelsList />
           </ul>
         </Sidebar>
         <Main>
-          <Outlet />
+          <NoteList />
         </Main>
       </Container>
     </>
@@ -118,19 +126,6 @@ const AddNoteButtonStyled = styled.button`
   cursor: inherit;
   user-select: none;
   font-size: inherit;
-`;
-
-const StyledNavLink = styled(NavLink)`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: inherit;
-
-  &.active {
-    background-color: #feefc3;
-  }
 `;
 
 const Item = styled.li`

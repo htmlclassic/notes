@@ -15,11 +15,12 @@ export const GlobalStyles = createGlobalStyle`
 
       &:hover {
         width: 10px;
+        height: 10px;
       }
     };
 
     &::-webkit-scrollbar-track {
-      box-shadow: inset 0 0 6px rgba(0,0,0,0.00);
+      /* box-shadow: inset 0 0 6px rgba(0,0,0,0.2); */
     };
 
     &::-webkit-scrollbar-thumb {

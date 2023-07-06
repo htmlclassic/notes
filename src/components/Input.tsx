@@ -14,7 +14,7 @@ export function Input({
   initialValue,
   placeholder,
   handleChange,
-  className 
+  className,
 }: InputProps) {
   const [showPlaceholder, setShowPlaceholder] = useState(initialValue === '');
   const ref: any = useRef(null);
@@ -27,7 +27,7 @@ export function Input({
   return(
       <Wrapper>
         <Placeholder show={showPlaceholder}>{placeholder}</Placeholder>
-        <div
+        <Div
           ref={ref}
           contentEditable={true}
 
@@ -46,20 +46,25 @@ export function Input({
 
           className={className}
           suppressContentEditableWarning={true}
-        ></div>
+        ></Div>
       </Wrapper>
   );
 }
 
-const Wrapper = styled.div`
+const Div = styled.div`
+  padding: 15px 0;
+`;
+
+const Wrapper = styled.div<any>`
+  transition: all 0.3s;
   position: relative;
   z-index: 1;
 `;
 
 const Placeholder = styled.span<any>`
-  font-weight: 300;
   top: 50%;
   transform: translateY(-50%);
+  font-weight: 300;
   position: absolute;
   z-index: -1;
   color: #b1b1b1;

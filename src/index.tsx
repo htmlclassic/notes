@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { NoteList } from './components/NoteList';
 import { PageNotFound } from './components/PageNotFound';
 
 import store from "./app/store";
@@ -9,24 +8,19 @@ import { Provider } from "react-redux";
 
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider
 } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
+    element: <Navigate to="notes?filter=All" />,
+    path: '/',
     errorElement: <PageNotFound />,
-    children: [
-      {
-        path: "/",
-        element: <NoteList filter="all" />
-      },
-      {
-        path: "/archived",
-        element: <NoteList filter="archived" />,
-      }
-    ]
+  },
+  {
+    path: "/notes",
+    element: <App />,
   }
 ]);
 

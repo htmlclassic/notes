@@ -3,7 +3,7 @@ export interface INote {
   title: string;
   text: string;
   bgColor: string;
-  trashed: boolean;
+  labels: string[];
 }
 
 export interface IactionDelete {
@@ -18,6 +18,7 @@ export interface IactionUpdate {
     title?: string;
     text?: string;
     bgColor?: string;
+    label?: string;
   };
 }
 
@@ -27,3 +28,5 @@ export interface IactionUpdatePayload {
   text?: string;
   bgColor?: string;
 }
+
+export type LabelsType = string[];
