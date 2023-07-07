@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { INote, IactionDelete, IactionUpdate } from '../../types';
-import { reservedLabels } from '../labels/labelsSlice';
 
 // localStorage.setItem('notes', ''); // clear storage
 
@@ -17,7 +16,8 @@ const slice = createSlice({
         title: '',
         text: '',
         bgColor: '#ffffff',
-        labels: [ action.payload.activeLabel ]
+        trashed: false,
+        labels: action.payload.label ? [ action.payload.label ] : []
       });
     },
 
@@ -25,11 +25,11 @@ const slice = createSlice({
       const note = state.find(note => note.id === action.payload);
 
       if (note) {
-        if (note.labels.includes(reservedLabels.trash)) {
+        if (note.trashed) {
           return state.filter(el => note.id !== el.id);
         }
 
-        note.labels = [reservedLabels.trash];
+        note.trashed = true;
       }
     },
 
@@ -44,12 +44,9 @@ const slice = createSlice({
       if (payload.bgColor !== undefined) targetNote.bgColor = payload.bgColor;
       if (
         payload.label !== undefined &&
-        payload.label !== reservedLabels.empty &&
-        payload.label !== reservedLabels.all &&
-        payload.label !== reservedLabels.trash
+        payload.label !== '' &&
+        !targetNote.labels.includes(payload.label)
       ) {
-        // i mean it's cool that you reserved some words and dont let a user create a label like that
-        // but how the fuck is he notified about it?
         targetNote.labels.push(payload.label);
       }
     }

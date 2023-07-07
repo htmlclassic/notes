@@ -1,28 +1,33 @@
 import { GlobalStyles } from "./styles/GlobalStyles";
 import styled from "styled-components";
 
-import { useEffect } from 'react';
-
 import { nanoid } from '@reduxjs/toolkit';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createNote } from "./features/notes/notesSlice";
 import { updateActiveNoteId } from "./features/activeNoteId/activeNoteIdSlice";
-
-import { NoteList } from "./features/notes/NoteList";
 import { LabelsList } from "./features/labels/LabelsList";
+import { NoteList } from "./features/notes/NoteList";
+import { useNavigate, useParams } from "react-router-dom";
+import { createLabel } from "./features/labels/labelsSlice";
+import { RESERVED_ARCHIVED_NOTES_LABEL } from "./features/labels/labelsSlice";
 
-import { selectActiveLabel, updateActiveLabel } from "./features/activeLabel/activeLabelSlice";
-import { useSearchParams } from "react-router-dom";
+console.log(RESERVED_ARCHIVED_NOTES_LABEL);
 
 export default function App() {
+  const { label } = useParams();
   const dispatch = useDispatch();
-  const activeLabel = useSelector(selectActiveLabel);
-  const label = useSearchParams()[0].get('filter');
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(updateActiveLabel(label));
-  });
+  const handleAddNote = () => {
+    const id = nanoid();
+                
+    dispatch(createLabel(label));
+    dispatch(createNote({ id, label }));
+    dispatch(updateActiveNoteId(id));
+
+    navigate(`/${label || ''}`);
+  };
 
   return (
     <>
@@ -33,15 +38,13 @@ export default function App() {
         </Header>
         <Sidebar>
           <ul>
-            <Item
-              onClick={() => {
-                const id = nanoid();
-
-                dispatch(createNote({id, activeLabel}));
-                dispatch(updateActiveNoteId(id));
-              }}
-            >
-              <AddNoteButton>Add a note</AddNoteButton>
+            <Item disabled={label === RESERVED_ARCHIVED_NOTES_LABEL}>
+              <AddNoteButtonStyled
+                onClick={handleAddNote}
+                disabled={label === RESERVED_ARCHIVED_NOTES_LABEL}
+              >
+                Add a note
+              </AddNoteButtonStyled>
             </Item>
             <LabelsList />
           </ul>
@@ -56,10 +59,6 @@ export default function App() {
 
 interface Props {
   children: React.ReactNode
-}
-
-function AddNoteButton({ children }: Props) {
-  return <AddNoteButtonStyled>{children}</AddNoteButtonStyled>
 }
 
 function Header({ children }: Props) {
@@ -128,7 +127,8 @@ const AddNoteButtonStyled = styled.button`
   font-size: inherit;
 `;
 
-const Item = styled.li`
+// this disabled prop is horrible :)
+const Item = styled.li<any>`
   cursor: pointer;
   height: 50px;
   border-radius: 10px;
@@ -141,14 +141,14 @@ const Item = styled.li`
 
   &:first-child {
     margin-bottom: 30px;
-    border: 2px dashed orange;
+    border: 2px dashed ${({ disabled }) => disabled ? 'gray' : 'orange'};
     
     &:hover {
-      background-color: #ffd988;
+      background-color: ${({ disabled }) => disabled ? 'transparent' : '#ffd988'};
     }
   }
 
   &:hover {
-    border: 2px solid orange;
+    ${({ disabled }) => disabled || 'border: 2px solid orange;'}
   }
 `;

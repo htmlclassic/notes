@@ -1,35 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { LabelsType } from "../../types";
 
-export enum reservedLabels {
-  trash = 'Trash',
-  all = 'All',
-  empty = ''
-};
-
-let initialState: string[];
-
-if (localStorage.getItem('labels')) {
-  initialState = JSON.parse(localStorage.getItem('labels') as string);
-} else {
-  initialState = [ reservedLabels.all, reservedLabels.trash ];
-}
+let initialState: string[] = JSON.parse(localStorage.getItem('labels') || '[]');
 
 const slice = createSlice({
   name: 'labels',
   initialState,
   reducers: {
     createLabel: (state, action) => {
-      if (!state.includes(action.payload) && action.payload !== '') {
+      if (
+        action.payload &&
+        !state.includes(action.payload) &&
+        action.payload !== '' &&
+        action.payload !== RESERVED_ARCHIVED_NOTES_LABEL
+      ) {
         state.push(action.payload);
       }
     },
 
     deleteLabel: (state, action) => {
-      if (action.payload === 'All' || action.payload === 'Trash') {
-        return state;
-      }
-
       return state.filter(label => label !== action.payload);
     },
 
@@ -41,6 +29,7 @@ const slice = createSlice({
   }
 });
 
+export const RESERVED_ARCHIVED_NOTES_LABEL = 'archived';
 export const selectLabels = (state: any) => state.labels;
 export const labelsSliceReducer = slice.reducer;
 export const { createLabel, deleteLabel, updateLabel } = slice.actions;

@@ -9,15 +9,31 @@ import { useSelector } from "react-redux";
 import { selectNotes, updateNote, deleteNote } from "./notesSlice";
 import { selectActiveNoteId, updateActiveNoteId } from "../activeNoteId/activeNoteIdSlice";
 import { INote, IactionUpdatePayload } from "../../types";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-// filter is so much hardcoded. gotta fix it
 export function NoteList() {
-  const filter = useSearchParams()[0].get('filter');
+  const { label } = useParams();
   const dispatch = useDispatch();
-  const notes = useSelector(selectNotes);
+  const notes = useSelector(selectNotes).slice();
   const activeNoteId = useSelector(selectActiveNoteId);
   let notesList;
+
+  if (label) {
+    if (label === 'archived') {
+      notesList = makeNotesList(
+        notes.filter(note => note.trashed)
+      );
+    } else {
+      notesList = makeNotesList(
+        notes.filter(note => note.labels.includes(label) && !note.trashed)
+      );
+    }
+  // show all notes
+  } else {
+    notesList = makeNotesList(
+      notes.filter(note => !note.trashed)
+    )
+  }
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
@@ -38,7 +54,7 @@ export function NoteList() {
 
   const handleDelete = (id: string) => dispatch(deleteNote(id));
 
-  const handleChange = (payload: IactionUpdatePayload) => {
+  function handleChange(payload: IactionUpdatePayload) {
     dispatch(updateNote(payload));
   };
 
@@ -59,17 +75,9 @@ export function NoteList() {
     );
   }
 
-  if (filter === null) {
-    notesList = null;
-  } else if (filter === 'All') {
-    notesList = makeNotesList(notes.filter(note => !note.labels.includes('Trash')));
-  } else {
-    notesList = makeNotesList(notes.filter(note => note.labels.includes(filter)));
-  }
-
   return (
     <StyledNotesBlock>
-      { notesList || `No notes are found by label: ${filter}` }
+      { notesList || `You don't have any notes yet.`}
     </StyledNotesBlock>
   );
 }

@@ -6,21 +6,17 @@ import { PageNotFound } from './components/PageNotFound';
 import store from "./app/store";
 import { Provider } from "react-redux";
 
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
-    element: <Navigate to="notes?filter=All" />,
+    element: <App />,
     path: '/',
     errorElement: <PageNotFound />,
   },
   {
-    path: "/notes",
-    element: <App />,
+    path: '/:label',
+    element: <App />
   }
 ]);
 

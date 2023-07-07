@@ -1,55 +1,53 @@
 import styled from 'styled-components';
 import { useDispatch, useSelector } from "react-redux";
-import { createLabel, deleteLabel, updateLabel, selectLabels } from "./labelsSlice";
-import { Navlink } from '../../components/Navlink';
+import { createLabel, deleteLabel, selectLabels } from "./labelsSlice";
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { updateActiveLabel } from '../activeLabel/activeLabelSlice';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export function LabelsList() {
   const labels = useSelector(selectLabels);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleDelete = (labelName: string) => {
     dispatch(deleteLabel(labelName));
-    navigate('/');
+    // navigate('/');
   };
 
   useEffect(() => {
     localStorage.setItem('labels', JSON.stringify(labels));
   }, [labels]);
 
+  const labelsList = labels.map((label: string) => 
+    <Item key={label}>
+      <NavLinkStyled
+        to={`/${label}`}
+      >
+        { label }
+      </NavLinkStyled>
+    </Item>
+  );
+
   return (
     <ul>
       <CreateLabelForm /><br />
-      {
-        labels.map((label: string) =>
-          <Item key={label}>
-            <Navlink
-              to={`/notes?filter=${label}`}
-              onClick={() => {
-                dispatch(updateActiveLabel(label));
-              }}
-            >
-              {label}
-            </Navlink>
-            {
-              label !== 'All' && label !== 'Trash' ? 
-              (
-                <button
-                  onClick={() => handleDelete(label)}
-                >X</button>
-              ) : null
-            }
-          </Item>
-        )
-      }
+      <Item>
+        <NavLinkStyled to={`/`} >
+          All notes
+        </NavLinkStyled>
+      </Item>
+      <Item>
+        <NavLinkStyled to={`/archived`} >
+          Trashed notes
+        </NavLinkStyled>
+      </Item>
+      { labelsList }
     </ul>
   );
 }
 
 function CreateLabelForm() {
+  const navigate = useNavigate();
   const [value, setValue] = useState('');
   const dispatch = useDispatch();
 
@@ -60,6 +58,7 @@ function CreateLabelForm() {
   const handleSubmit = () => {
     dispatch(createLabel(value));
     setValue('');
+    navigate(`/${value}`)
   };
   
   return (
@@ -75,6 +74,14 @@ function CreateLabelForm() {
   );
 }
 
+const NavLinkStyled = styled(NavLink)`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Item = styled.li`
   cursor: pointer;
   height: 50px;
@@ -85,6 +92,10 @@ const Item = styled.li`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  & .active {
+    color: red;
+  }
 
   &:hover {
     border: 2px solid orange;

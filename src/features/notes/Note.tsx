@@ -115,7 +115,9 @@ export function Note({
           />
         </Content>
         <Labels active={isActive}>
-          <Label>{note.labels}</Label>
+          {
+            note.labels.map(label => <Label>{label}</Label>)
+          }
         </Labels>
         <Toolbar onMouseDown={e => e.stopPropagation()}>
             <ChangeBgColorBtn onClick={e => {
