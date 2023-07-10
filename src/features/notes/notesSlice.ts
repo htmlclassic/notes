@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { INote, IactionDelete, IactionUpdate } from '../../types';
+import { INote, IactionUpdatePayload } from '../../types';
 
 // localStorage.setItem('notes', ''); // clear storage
 
@@ -10,18 +10,18 @@ const slice = createSlice({
   name: 'notes',
   initialState,
   reducers: {
-    createNote: (state, action) => {
+    createNote: (state, action: PayloadAction<{ id: string; label: string; }>) => {
       state.push({
         id: action.payload.id,
         title: '',
         text: '',
         bgColor: '#ffffff',
         trashed: false,
-        labels: action.payload.label ? [ action.payload.label ] : []
+        labels: action.payload.label !== '' ? [ action.payload.label ] : []
       });
     },
 
-    deleteNote: (state, action: IactionDelete) => {
+    deleteNote: (state, action: PayloadAction<string>) => {
       const note = state.find(note => note.id === action.payload);
 
       if (note) {
@@ -33,7 +33,7 @@ const slice = createSlice({
       }
     },
 
-    updateNote: (state, action: IactionUpdate) => {
+    updateNote: (state, action: PayloadAction<IactionUpdatePayload>) => {
       const payload = action.payload;
       const targetNote = state.find(note => note.id === payload.id);
 

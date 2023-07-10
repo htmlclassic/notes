@@ -1,13 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-const initialState: string | null = null;
+const initialState = '';
 
 const slice = createSlice({
   name: 'activeNoteId',
   initialState,
   reducers: {
-    update: (state, { payload }) => {
-      return payload;
+    update: (state, action: PayloadAction<string>) => {
+      return action.payload;
     }
   }
 });

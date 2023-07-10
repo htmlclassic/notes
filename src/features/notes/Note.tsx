@@ -8,7 +8,9 @@ import { ColorPanel } from '../../components/ColorPanel';
 import { ReactComponent as TrashIcon } from './assets/trash-icon.svg';
 import { ReactComponent as ColorPlateIcon } from './assets/color-icon.svg';
 
-import { INote, IactionUpdatePayload } from '../../types';
+import { INote } from '../../types';
+import { useDispatch } from 'react-redux';
+import { updateNote } from './notesSlice';
 
 const TRANSITION_TIME = 0.2;
 let zIndex = 100;
@@ -17,7 +19,6 @@ interface NoteProps {
   note: INote;
   isActive: boolean;
   handleDelete: () => void;
-  handleChange: (payload: IactionUpdatePayload) => void;
   handleClick: () => void;
 }
 
@@ -25,7 +26,6 @@ export function Note({
   note,
   isActive,
   handleDelete,
-  handleChange,
   handleClick
 } : NoteProps) {
 
@@ -33,6 +33,7 @@ export function Note({
   const noteRef: any = useRef(null);
   const [showColorPanel, setShowColorPanel] = useState(false);
   const [bgColor, setBgColor] = useState(note.bgColor);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isActive) {
@@ -74,17 +75,17 @@ export function Note({
   };
 
   const handleInputTitleChange = (title: string) => {
-    handleChange({
+    dispatch(updateNote({
       id: note.id,
       title,
-    });
+    }));
   };
 
   const handleInputTextChange = (text: string) => {
-    handleChange({
+    dispatch(updateNote({
       id: note.id,
-      text
-    });
+      text,
+    }));
   };
 
   return (
@@ -135,10 +136,10 @@ export function Note({
               onClick={color => {
                 setShowColorPanel(false);
                 setBgColor(color);
-                handleChange({
+                dispatch(updateNote({
                   id: note.id,
                   bgColor: color
-                });
+                }));
               }}
               show={showColorPanel}
             />

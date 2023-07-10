@@ -42,7 +42,7 @@ export function NoteList() {
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (e.button === 0) {
-        dispatch(updateActiveNoteId(null));
+        dispatch(updateActiveNoteId(''));
       }
     };
 
@@ -54,10 +54,6 @@ export function NoteList() {
 
   const handleDelete = (id: string) => dispatch(deleteNote(id));
 
-  function handleChange(payload: IactionUpdatePayload) {
-    dispatch(updateNote(payload));
-  };
-
   function makeNotesList(notes: INote[]) {
     if (notes.length === 0) return null;
 
@@ -67,7 +63,6 @@ export function NoteList() {
         note={note}
         isActive={note.id === activeNoteId}
         handleDelete={() => handleDelete(note.id)}
-        handleChange={handleChange}
         handleClick={() => {
           dispatch(updateActiveNoteId(note.id));
         }}

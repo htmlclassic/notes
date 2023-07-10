@@ -13,13 +13,17 @@ import { createLabel } from "./features/labels/labelsSlice";
 import { RESERVED_ARCHIVED_NOTES_LABEL } from "./features/labels/labelsSlice";
 
 export default function App() {
-  const { label } = useParams();
+  let { label } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleAddNote = () => {
     const id = nanoid();
-                
+    
+    if (label === undefined) {
+      label = '';
+    }
+
     dispatch(createLabel(label));
     dispatch(createNote({ id, label }));
     dispatch(updateActiveNoteId(id));
