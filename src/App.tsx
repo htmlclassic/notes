@@ -12,8 +12,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { createLabel } from "./features/labels/labelsSlice";
 import { RESERVED_ARCHIVED_NOTES_LABEL } from "./features/labels/labelsSlice";
 
-console.log(RESERVED_ARCHIVED_NOTES_LABEL);
-
 export default function App() {
   const { label } = useParams();
   const dispatch = useDispatch();
@@ -128,6 +126,7 @@ const AddNoteButtonStyled = styled.button`
 `;
 
 // this disabled prop is horrible :)
+// couldn't set ts props, idk why
 const Item = styled.li<any>`
   cursor: pointer;
   height: 50px;

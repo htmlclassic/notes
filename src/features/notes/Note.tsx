@@ -90,7 +90,7 @@ export function Note({
   return (
     <Wrapper ref={wrapperRef}>
       <StyledNote
-        isActive={isActive}
+        active={isActive}
         bgColor={bgColor}
         onMouseDown={(e: React.MouseEvent<HTMLDivElement>) => {
           e.stopPropagation();
@@ -185,7 +185,12 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const StyledNote = styled.div<any>`
+interface IStyledNote {
+  bgColor: string;
+  active: boolean;
+}
+
+const StyledNote = styled.div<IStyledNote>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -198,8 +203,8 @@ const StyledNote = styled.div<any>`
   cursor: pointer;
   border: 2px solid transparent;
   transition: all 0.15s;
-  ${({ bgColor, isActive }) => {
-    if (bgColor === '#ffffff' && !isActive) {
+  ${({ bgColor, active }) => {
+    if (bgColor === '#ffffff' && !active) {
       return 'border: 2px solid rgba(0, 0, 0, 0.1);';
     }
   }}
@@ -207,11 +212,11 @@ const StyledNote = styled.div<any>`
   position: absolute;
 
   &:hover {
-    border: ${({isActive}) => isActive ?
+    border: ${({ active }) => active ?
     `2px solid transparent` : `2px solid rgba(0, 0, 0, 0.5)`}
   };
 
-  ${({ isActive }) => isActive ?
+  ${({ active }) => active ?
     `
       box-shadow: 0 0 15px 2px rgba(0, 0, 0, 0.5);
       cursor: auto;
@@ -219,7 +224,11 @@ const StyledNote = styled.div<any>`
   }
 `;
 
-const Content = styled.div<any>`
+interface IContent {
+  active: boolean;
+}
+
+const Content = styled.div<IContent>`
   padding: 0 ${SIDE_PADDING};
   display: flex;
   flex-direction: column;
@@ -230,7 +239,11 @@ const Content = styled.div<any>`
 
 
 
-const Labels = styled.ul<any>`
+interface ILabels {
+  active: boolean;
+}
+
+const Labels = styled.ul<ILabels>`
   --fontSize: 1rem;
   --sidePadding: 5px;
   --onelineHeight: calc(
