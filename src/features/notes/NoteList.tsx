@@ -33,7 +33,7 @@ export function NoteList() {
         notes.filter(note => {
           const targetLabel = labels.find(label => note.labels.includes(label.id));
 
-          return targetLabel?.name === label ? note : false;
+          return targetLabel?.name === label && !note.trashed ? note : false;
         })
       );
     }

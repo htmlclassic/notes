@@ -52,51 +52,50 @@ export function Label({ label: { id, name } }: LabelProps) {
 
   return (
     <>
-      <LabelIcon />
-      <Navlink
+      <NavLinkStyled
         to={`/${name}`}
       >
-        { name }
-      </Navlink>
-      <Div>
-        <Btn
-          onClick={() => {
-            setEdit(true);
-          }}
-        >
-          <EditIcon />
-        </Btn>
-        <Btn
-          onClick={() => {
-            dispatch(deleteLabel(id));
-            dispatch(deleteNotesByLabelId(id));
-            navigate('/');
-          }}
-        >
-          <DeleteIcon />
-        </Btn>
-      </Div>
+        <LabelIcon />
+        <LabelName>{ name }</LabelName>
+        <Div>
+          <Btn
+            onClick={() => {
+              setEdit(true);
+            }}
+          >
+            <EditIcon />
+          </Btn>
+          <Btn
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault();
+
+              navigate(`/`);
+              dispatch(deleteLabel(id));
+              dispatch(deleteNotesByLabelId(id));
+            }}
+          >
+            <DeleteIcon />
+          </Btn>
+        </Div>
+      </NavLinkStyled>
     </>
   );
 }
 
-const SIDE_PADDING = '5px';
 const LABEL_ICON_SIZE = '20px';
 const OTHER_ICON_SIZE = '15px';
 const DIV_GAP = '10px';
 
-const Navlink = styled(NavLinkStyled)`
-  
+const LabelName = styled.span`
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const LabelIcon = styled(LabelI)`
   width: ${LABEL_ICON_SIZE};
   height: ${LABEL_ICON_SIZE};
   flex-shrink: 0;
-  position: absolute;
-  left: ${SIDE_PADDING};
-  top: 50%;
-  transform: translateY(-50%);
 `;
 
 const SIZE = `
@@ -105,21 +104,19 @@ const SIZE = `
 `;
 
 const EditIcon = styled(EditI)`
+  display: flex;
   ${SIZE}
 `;
 
 const DeleteIcon = styled(DeleteI)`
+  display: flex;
   ${SIZE}
 `;
 
 const Div = styled.div`
-  position: absolute;
-  right: ${SIDE_PADDING};
-  top: 50%;
-  transform: translateY(-50%);
-
   display: flex;
   gap: ${DIV_GAP};
+  flex-shrink: 0;
 `;
 
 const Wrapper = styled.div`

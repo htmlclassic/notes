@@ -42,7 +42,8 @@ export default function App() {
       <GlobalStyles />
       <Container>
         <Header>
-          <h1>Header</h1>
+          <span>Если что-то поломалось нажми на эту кнопку и перезагрузи страницу через Ctrl+F5, мб поможет</span>
+          <button onClick={() => localStorage.clear()} style={{ padding: 5 }}><b>Delete all data</b></button>
         </Header>
         <Sidebar>
           <AddNoteButtonStyled
@@ -96,6 +97,7 @@ const StyledHeader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   z-index: ${STYLED_HEADER_ZINDEX};
   background-color: white;
   border-bottom: 2px solid lightgray;
@@ -137,7 +139,7 @@ const AddNoteButtonStyled = styled.button<any>`
 
   ${({ disabled }) => disabled ?
     `cursor: not-allowed;` :
-    
+
     `&:hover {
       background-color: #ffea70;
       border-color: transparent;

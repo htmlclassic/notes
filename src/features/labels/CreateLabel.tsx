@@ -1,10 +1,9 @@
-import styled from 'styled-components';
 import { useDispatch } from "react-redux";
 import { createLabel } from "./labelsSlice";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { nanoid } from '@reduxjs/toolkit';
-import { Button, Input } from './styles';
+import { Input } from './styles';
 
 export function CreateLabel() {
   const navigate = useNavigate();

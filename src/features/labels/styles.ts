@@ -5,12 +5,18 @@ export const NavLinkStyled = styled(NavLink)`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0 5px;
+  gap: 10px;
   align-items: center;
   border-radius: inherit;
 
+  text-align: center;
+
   text-decoration: none;
   color: black;
+
+  border: 1px solid transparent;
 `;
 
 export const Input = styled.input`

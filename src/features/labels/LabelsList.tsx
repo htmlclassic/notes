@@ -24,12 +24,12 @@ export function LabelsList() {
       <CreateLabel /><br />
       <Item>
         <NavLinkStyled to={`/`} >
-          Notes
+          <span style={{flexGrow: 1}}>Notes</span>
         </NavLinkStyled>
       </Item>
       <Item>
         <NavLinkStyled to={`/archived`} >
-          Trash
+          <span style={{flexGrow: 1}}>Trash</span>
         </NavLinkStyled>
       </Item>
       { labelsList }
@@ -42,7 +42,7 @@ const Item = styled.li`
   cursor: pointer;
   height: 50px;
   border-radius: 10px;
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   transition: all 0.1s;
 
   display: flex;
@@ -50,10 +50,10 @@ const Item = styled.li`
   justify-content: center;
 
   & .active {
-    border: 1px solid red;
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   &:hover {
-    background-color: rgba(189, 189, 189, 0.2);
+    background-color: rgba(150, 150, 150, 0.1);
   }
 `;
