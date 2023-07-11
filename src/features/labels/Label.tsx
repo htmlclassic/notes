@@ -13,22 +13,6 @@ import { ReactComponent as LabelI } from './assets/label-icon.svg';
 import { ReactComponent as EditI } from './assets/edit-icon.svg';
 import { ReactComponent as DeleteI } from './assets/delete-icon.svg';
 
-const LabelIcon = styled(LabelI)`
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-`;
-
-const EditIcon = styled(EditI)`
-  width: 15px;
-  height: 15px;
-`;
-
-const DeleteIcon = styled(DeleteI)`
-  width: 15px;
-  height: 15px;
-`;
-
 interface LabelProps {
   label: ILabel;
 }
@@ -69,11 +53,11 @@ export function Label({ label: { id, name } }: LabelProps) {
   return (
     <>
       <LabelIcon />
-      <NavLinkStyled
+      <Navlink
         to={`/${name}`}
       >
         { name }
-      </NavLinkStyled>
+      </Navlink>
       <Div>
         <Btn
           onClick={() => {
@@ -96,9 +80,46 @@ export function Label({ label: { id, name } }: LabelProps) {
   );
 }
 
+const SIDE_PADDING = '5px';
+const LABEL_ICON_SIZE = '20px';
+const OTHER_ICON_SIZE = '15px';
+const DIV_GAP = '10px';
+
+const Navlink = styled(NavLinkStyled)`
+  
+`;
+
+const LabelIcon = styled(LabelI)`
+  width: ${LABEL_ICON_SIZE};
+  height: ${LABEL_ICON_SIZE};
+  flex-shrink: 0;
+  position: absolute;
+  left: ${SIDE_PADDING};
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+const SIZE = `
+  width: ${OTHER_ICON_SIZE};
+  height: ${OTHER_ICON_SIZE};
+`;
+
+const EditIcon = styled(EditI)`
+  ${SIZE}
+`;
+
+const DeleteIcon = styled(DeleteI)`
+  ${SIZE}
+`;
+
 const Div = styled.div`
+  position: absolute;
+  right: ${SIDE_PADDING};
+  top: 50%;
+  transform: translateY(-50%);
+
   display: flex;
-  gap: 10px;
+  gap: ${DIV_GAP};
 `;
 
 const Wrapper = styled.div`
