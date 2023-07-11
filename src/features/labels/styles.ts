@@ -11,12 +11,13 @@ export const NavLinkStyled = styled(NavLink)`
   align-items: center;
   border-radius: inherit;
 
-  text-align: center;
-
   text-decoration: none;
   color: black;
 
   border: 1px solid transparent;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const Input = styled.input`

@@ -35,13 +35,13 @@ export function LabelsList() {
         <Item>
           <NavLinkStyled to={`/`} >
             <Div><AllIcon style={ICON_SIZE} /></Div>
-            <span style={{flexGrow: 1}}>Notes</span>
+            <span style={{flexGrow: 1, textAlign: 'center'}}>Notes</span>
           </NavLinkStyled>
         </Item>
-        <Item>
+        <Item style={{marginBottom: 10}}>
           <NavLinkStyled to={`/archived`} >
             <Div><TrashIcon style={ICON_SIZE} /></Div>
-            <span style={{flexGrow: 1}}>Trash</span>
+            <span style={{flexGrow: 1, textAlign: 'center'}}>Trash</span>
           </NavLinkStyled>
         </Item>
         { labelsList }
@@ -52,7 +52,7 @@ export function LabelsList() {
 
 const Div = styled.div`
   display: flex;
-  position: absolute;;
+  position: absolute;
 `;
 
 const List = styled.ul`

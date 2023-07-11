@@ -79,7 +79,7 @@ const StyledSideBar = styled.div`
   width: 300px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 15px;
   flex-shrink: 0;
   overflow: hidden;
 

@@ -32,7 +32,7 @@ export function CreateLabel() {
         onKeyDown={handleSubmit}
         value={value}
         type="text"
-        placeholder='Create label'
+        placeholder='Create label  (Enter to submit)'
       />
     </div>
   );
