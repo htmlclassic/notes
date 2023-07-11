@@ -5,6 +5,15 @@ import { useEffect } from 'react';
 import { Label } from './Label';
 import { CreateLabel } from './CreateLabel';
 import { NavLinkStyled } from './styles';
+import { SIDEBAR_PADDING } from '../../styles/globalVars';
+
+import { ReactComponent as TrashIcon } from './assets/trash-icon.svg';
+import { ReactComponent as AllIcon } from './assets/all-icon.svg';
+
+const ICON_SIZE = {
+  width: 17,
+  height: 17,
+};
 
 export function LabelsList() {
   const labels = useSelector(selectLabels);
@@ -20,22 +29,36 @@ export function LabelsList() {
   );
 
   return (
-    <ul>
-      <CreateLabel /><br />
-      <Item>
-        <NavLinkStyled to={`/`} >
-          <span style={{flexGrow: 1}}>Notes</span>
-        </NavLinkStyled>
-      </Item>
-      <Item>
-        <NavLinkStyled to={`/archived`} >
-          <span style={{flexGrow: 1}}>Trash</span>
-        </NavLinkStyled>
-      </Item>
-      { labelsList }
-    </ul>
+    <>
+      <CreateLabel />
+      <List>
+        <Item>
+          <NavLinkStyled to={`/`} >
+            <Div><AllIcon style={ICON_SIZE} /></Div>
+            <span style={{flexGrow: 1}}>Notes</span>
+          </NavLinkStyled>
+        </Item>
+        <Item>
+          <NavLinkStyled to={`/archived`} >
+            <Div><TrashIcon style={ICON_SIZE} /></Div>
+            <span style={{flexGrow: 1}}>Trash</span>
+          </NavLinkStyled>
+        </Item>
+        { labelsList }
+      </List>
+    </>
   );
 }
+
+const Div = styled.div`
+  display: flex;
+  position: absolute;;
+`;
+
+const List = styled.ul`
+  overflow: auto;
+  padding: ${SIDEBAR_PADDING};
+`;
 
 const Item = styled.li`
   position: relative;
@@ -50,7 +73,7 @@ const Item = styled.li`
   justify-content: center;
 
   & .active {
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.3);
   }
 
   &:hover {

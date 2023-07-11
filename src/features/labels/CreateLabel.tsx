@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { nanoid } from '@reduxjs/toolkit';
 import { Input } from './styles';
+import { SIDEBAR_PADDING } from '../../styles/globalVars';
 
 export function CreateLabel() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export function CreateLabel() {
   };
   
   return (
-    <div>
+    <div style={{ padding: SIDEBAR_PADDING }}>
       <Input
         onChange={handleChange}
         onKeyDown={handleSubmit}
