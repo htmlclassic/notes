@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { nanoid } from '@reduxjs/toolkit';
 import { Input } from './styles';
 import { SIDEBAR_PADDING } from '../../styles/globalVars';
+import styled from "styled-components";
 
 export function CreateLabel() {
   const navigate = useNavigate();
@@ -26,14 +27,34 @@ export function CreateLabel() {
   };
   
   return (
-    <div style={{ padding: SIDEBAR_PADDING }}>
-      <Input
+    <Div>
+      <Label htmlFor="createLabelField">Create label</Label>
+      <StyledInput
         onChange={handleChange}
         onKeyDown={handleSubmit}
+        id="createLabelField"
         value={value}
         type="text"
-        placeholder='Create label  (Enter to submit)'
+        placeholder='Press Enter to submit'
       />
-    </div>
+    </Div>
   );
 }
+
+const StyledInput = styled(Input)`
+  border-radius: 5px;
+  font-size: 0.9rem;
+`;
+
+const Label = styled.label`
+  font-size: 0.9rem;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Div = styled.div`
+  padding: ${SIDEBAR_PADDING};
+`;
