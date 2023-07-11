@@ -1,32 +1,47 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { ILabel, IRootState } from '../../types';
 
-let initialState: string[] = JSON.parse(localStorage.getItem('labels') || '[]');
+let initialState: ILabel[] = JSON.parse(localStorage.getItem('labels') || '[]');
 
 const slice = createSlice({
   name: 'labels',
   initialState,
   reducers: {
-    createLabel: (state, action: PayloadAction<string>) => {
+    createLabel: (state, action: PayloadAction<ILabel>) => {
+      const { id, name } = action.payload;
+
+      if (!id) return state;
+
+      const labelExists = state.find(label => name === label.name)
+
       if (
-        action.payload !== '' &&
-        !state.includes(action.payload) &&
-        action.payload !== RESERVED_ARCHIVED_NOTES_LABEL
+        name &&
+        !labelExists &&
+        name !== RESERVED_ARCHIVED_NOTES_LABEL
       ) {
         state.push(action.payload);
       }
     },
 
     deleteLabel: (state, action: PayloadAction<string>) => {
-      return state.filter(label => label !== action.payload);
+      return state.filter(label => label.id !== action.payload);
     },
 
-    updateLabel: (state, action) => {
-      throw new Error('Updating label is not implemented yet.');
+    updateLabel: (state, action: PayloadAction<ILabel>) => {
+      const { id, name } = action.payload;
+
+      if (!id) return state;
+
+      const label = state.find(label => label.id === id);
+
+      if (label) {
+        label.name = name;
+      }
     }
   }
 });
 
 export const RESERVED_ARCHIVED_NOTES_LABEL = 'archived';
-export const selectLabels = (state: any) => state.labels;
+export const selectLabels = (state: IRootState) => state.labels;
 export const labelsSliceReducer = slice.reducer;
 export const { createLabel, deleteLabel, updateLabel } = slice.actions;

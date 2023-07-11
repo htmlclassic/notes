@@ -6,8 +6,8 @@ import { labelsSliceReducer } from "../features/labels/labelsSlice";
 const store = configureStore({
   reducer: {
     notes: notesSliceReducer,
-    activeNoteId: activeNoteIdReducer,
     labels: labelsSliceReducer,
+    activeNoteId: activeNoteIdReducer,
   }
 });
 

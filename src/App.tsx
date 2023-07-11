@@ -3,32 +3,38 @@ import styled from "styled-components";
 
 import { nanoid } from '@reduxjs/toolkit';
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createNote } from "./features/notes/notesSlice";
 import { updateActiveNoteId } from "./features/activeNoteId/activeNoteIdSlice";
 import { LabelsList } from "./features/labels/LabelsList";
 import { NoteList } from "./features/notes/NoteList";
 import { useNavigate, useParams } from "react-router-dom";
-import { createLabel } from "./features/labels/labelsSlice";
+import { createLabel, selectLabels } from "./features/labels/labelsSlice";
 import { RESERVED_ARCHIVED_NOTES_LABEL } from "./features/labels/labelsSlice";
 
 export default function App() {
-  let { label } = useParams();
+  let { label: labelName } = useParams();
+  if (labelName === undefined) labelName = '';
+
+  const labels = useSelector(selectLabels);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleAddNote = () => {
-    const id = nanoid();
-    
-    if (label === undefined) {
-      label = '';
+    const noteId = nanoid();
+    const labelExist = labels.find(label => label.name === labelName);
+    const labelId = labelExist ? labelExist.id : nanoid();
+
+    if (labelName === '') {
+      dispatch(createNote({ id: noteId, label: '' }));
+    } else {
+      dispatch(createNote({ id: noteId, label: labelId }));
     }
 
-    dispatch(createLabel(label));
-    dispatch(createNote({ id, label }));
-    dispatch(updateActiveNoteId(id));
+    dispatch(createLabel({ id: labelId, name: labelName as string }));
+    dispatch(updateActiveNoteId(noteId));
 
-    navigate(`/${label || ''}`);
+    navigate(`/${labelName}`);
   };
 
   return (
@@ -39,17 +45,13 @@ export default function App() {
           <h1>Header</h1>
         </Header>
         <Sidebar>
-          <ul>
-            <Item disabled={label === RESERVED_ARCHIVED_NOTES_LABEL}>
-              <AddNoteButtonStyled
-                onClick={handleAddNote}
-                disabled={label === RESERVED_ARCHIVED_NOTES_LABEL}
-              >
-                Add a note
-              </AddNoteButtonStyled>
-            </Item>
-            <LabelsList />
-          </ul>
+          <AddNoteButtonStyled
+            onClick={handleAddNote}
+            disabled={labelName === RESERVED_ARCHIVED_NOTES_LABEL}
+          >
+            Add a note
+          </AddNoteButtonStyled>
+          <LabelsList />
         </Sidebar>
         <Main>
           <NoteList />
@@ -110,6 +112,9 @@ const StyledSideBar = styled.div`
   position: fixed;
   height: 100vh;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 `;
 
 const Main = styled.div`
@@ -118,40 +123,24 @@ const Main = styled.div`
   padding-top: calc(30px + ${HEADER_HEIGHT});
 `;
 
-const AddNoteButtonStyled = styled.button`
+const AddNoteButtonStyled = styled.button<any>`
   background-color: transparent;
-  border: none;
-  width: 100%;
-  height: 100%;
-  transition: border-color 0.3s;
-  cursor: inherit;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
   user-select: none;
   font-size: inherit;
-`;
 
-// this disabled prop is horrible :)
-// couldn't set ts props, idk why
-const Item = styled.li<any>`
+  display: inline-block;
+  width: 100%;
+  padding: 15px 0;
   cursor: pointer;
-  height: 50px;
-  border-radius: 10px;
-  border: 2px solid transparent;
-  transition: all 0.1s;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:first-child {
-    margin-bottom: 30px;
-    border: 2px dashed ${({ disabled }) => disabled ? 'gray' : 'orange'};
+  ${({ disabled }) => disabled ?
+    `cursor: not-allowed;` :
     
-    &:hover {
-      background-color: ${({ disabled }) => disabled ? 'transparent' : '#ffd988'};
-    }
-  }
-
-  &:hover {
-    ${({ disabled }) => disabled || 'border: 2px solid orange;'}
+    `&:hover {
+      background-color: #ffea70;
+      border-color: transparent;
+    }`
   }
 `;

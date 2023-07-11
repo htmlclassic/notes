@@ -6,26 +6,35 @@ import { useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
-import { selectNotes, updateNote, deleteNote } from "./notesSlice";
+import { selectNotes, deleteNote } from "./notesSlice";
 import { selectActiveNoteId, updateActiveNoteId } from "../activeNoteId/activeNoteIdSlice";
-import { INote, IactionUpdatePayload } from "../../types";
+import { INote } from "../../types";
 import { useParams } from "react-router-dom";
+import { selectLabels } from "../labels/labelsSlice";
 
 export function NoteList() {
   const { label } = useParams();
+  const labels = useSelector(selectLabels);
   const dispatch = useDispatch();
   const notes = useSelector(selectNotes).slice();
   const activeNoteId = useSelector(selectActiveNoteId);
   let notesList;
+  let inTrashLabel = false;
 
   if (label) {
     if (label === 'archived') {
       notesList = makeNotesList(
         notes.filter(note => note.trashed)
       );
+
+      inTrashLabel = true;
     } else {
       notesList = makeNotesList(
-        notes.filter(note => note.labels.includes(label) && !note.trashed)
+        notes.filter(note => {
+          const targetLabel = labels.find(label => note.labels.includes(label.id));
+
+          return targetLabel?.name === label ? note : false;
+        })
       );
     }
   // show all notes
@@ -52,7 +61,17 @@ export function NoteList() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleDelete = (id: string) => dispatch(deleteNote(id));
+  const handleDelete = (id: string) => {
+    if (inTrashLabel) {
+      const answer = window.confirm(`You won't be able to restore the note. Are you sure you want to delete it?`);
+
+      if (answer) {
+        dispatch(deleteNote(id));
+      }
+    } else {
+      dispatch(deleteNote(id));
+    }
+  };
 
   function makeNotesList(notes: INote[]) {
     if (notes.length === 0) return null;

@@ -1,44 +1,35 @@
 import styled from 'styled-components';
-import { useDispatch, useSelector } from "react-redux";
-import { createLabel, deleteLabel, selectLabels } from "./labelsSlice";
-import { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { selectLabels } from "./labelsSlice";
+import { useEffect } from 'react';
+import { Label } from './Label';
+import { CreateLabel } from './CreateLabel';
+import { NavLinkStyled } from './styles';
 
 export function LabelsList() {
   const labels = useSelector(selectLabels);
-  const dispatch = useDispatch();
-  // const navigate = useNavigate();
-
-  const handleDelete = (labelName: string) => {
-    dispatch(deleteLabel(labelName));
-    // navigate('/');
-  };
 
   useEffect(() => {
     localStorage.setItem('labels', JSON.stringify(labels));
   }, [labels]);
 
-  const labelsList = labels.map((label: string) => 
-    <Item key={label}>
-      <NavLinkStyled
-        to={`/${label}`}
-      >
-        { label }
-      </NavLinkStyled>
+  const labelsList = labels.map(label => 
+    <Item key={label.id}>
+      <Label label={label} />
     </Item>
   );
 
   return (
     <ul>
-      <CreateLabelForm /><br />
+      <CreateLabel /><br />
       <Item>
         <NavLinkStyled to={`/`} >
-          All notes
+          Notes
         </NavLinkStyled>
       </Item>
       <Item>
         <NavLinkStyled to={`/archived`} >
-          Trashed notes
+          Trash
         </NavLinkStyled>
       </Item>
       { labelsList }
@@ -46,43 +37,8 @@ export function LabelsList() {
   );
 }
 
-function CreateLabelForm() {
-  const navigate = useNavigate();
-  const [value, setValue] = useState('');
-  const dispatch = useDispatch();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
-  };
-
-  const handleSubmit = () => {
-    dispatch(createLabel(value));
-    setValue('');
-    navigate(`/${value}`)
-  };
-  
-  return (
-    <div>
-      <input
-        onChange={handleChange}
-        value={value}
-        type="text"
-        placeholder='Enter label name'
-      />
-      <button onClick={handleSubmit}>Create label</button>
-    </div>
-  );
-}
-
-const NavLinkStyled = styled(NavLink)`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const Item = styled.li`
+  position: relative;
   cursor: pointer;
   height: 50px;
   border-radius: 10px;
@@ -92,12 +48,13 @@ const Item = styled.li`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 5px;
 
   & .active {
-    color: red;
+    text-decoration: underline;
   }
 
   &:hover {
-    border: 2px solid orange;
+    background-color: rgba(189, 189, 189, 0.2);
   }
 `;

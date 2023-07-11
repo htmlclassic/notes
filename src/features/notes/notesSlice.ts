@@ -33,6 +33,23 @@ const slice = createSlice({
       }
     },
 
+    deleteNotesByLabelId: (state, action: PayloadAction<string>) => {
+      const notesToDelete =  state.filter(note => note.labels.includes(action.payload));
+
+      notesToDelete.forEach(note => {
+        if (note.trashed) {
+          const targetIndex = state.findIndex(nt => nt.id === note.id);
+
+          if (targetIndex !== -1) {
+            state.splice(targetIndex, 1);
+          }
+        } else {
+          note.trashed = true;
+          note.labels = [];
+        }
+      });
+    },
+
     updateNote: (state, action: PayloadAction<IactionUpdatePayload>) => {
       const payload = action.payload;
       const targetNote = state.find(note => note.id === payload.id);
@@ -54,4 +71,4 @@ const slice = createSlice({
 
 export const selectNotes = (state: { notes: INote[] }) => state.notes;
 export const notesSliceReducer = slice.reducer;
-export const { createNote, deleteNote, updateNote } = slice.actions;
+export const { createNote, deleteNote, deleteNotesByLabelId, updateNote } = slice.actions;

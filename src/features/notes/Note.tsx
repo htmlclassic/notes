@@ -9,8 +9,9 @@ import { ReactComponent as TrashIcon } from './assets/trash-icon.svg';
 import { ReactComponent as ColorPlateIcon } from './assets/color-icon.svg';
 
 import { INote } from '../../types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateNote } from './notesSlice';
+import { selectLabels } from '../labels/labelsSlice';
 
 const TRANSITION_TIME = 0.2;
 let zIndex = 100;
@@ -33,7 +34,17 @@ export function Note({
   const noteRef: any = useRef(null);
   const [showColorPanel, setShowColorPanel] = useState(false);
   const [bgColor, setBgColor] = useState(note.bgColor);
+  const labels = useSelector(selectLabels);
   const dispatch = useDispatch();
+
+  const labelsList =
+    note.labels.map(id => 
+      <Label key={id}>
+        {
+          labels.find(label => label.id === id)?.name
+        }
+      </Label>);
+  
 
   useEffect(() => {
     if (isActive) {
@@ -117,7 +128,7 @@ export function Note({
         </Content>
         <Labels active={isActive}>
           {
-            note.labels.map(label => <Label>{label}</Label>)
+            labelsList.length ? labelsList : null
           }
         </Labels>
         <Toolbar onMouseDown={e => e.stopPropagation()}>
