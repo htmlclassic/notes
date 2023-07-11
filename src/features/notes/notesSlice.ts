@@ -43,8 +43,7 @@ const slice = createSlice({
       if (payload.text !== undefined) targetNote.text = payload.text;
       if (payload.bgColor !== undefined) targetNote.bgColor = payload.bgColor;
       if (
-        payload.label !== undefined &&
-        payload.label !== '' &&
+        payload.label &&
         !targetNote.labels.includes(payload.label)
       ) {
         targetNote.labels.push(payload.label);
