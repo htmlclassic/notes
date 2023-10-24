@@ -6,4 +6,4 @@ There's no backend. All the data is stored in local storage.
 It's hard to make a frontend part for me right now. Developing backend would be overkill.
 
 ## Live demo
-You can check out a live demo <b>[here](http://bottom-notes.rf.gd/)<b>.
+You can check out a live demo <b>[here](http://showposts.rf.gd)<b>.
